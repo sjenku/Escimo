@@ -3,7 +3,7 @@ import numpy as np
 from shapely import MultiPoint, Point
 
 
-class Engine:
+class EngineEskimo:
 
     def __init__(self,start_pos,
                  end_pos,

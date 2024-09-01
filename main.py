@@ -1,6 +1,6 @@
 import json
 from Utils.draw import DrawTool
-from Logic.engine import Engine
+from Logic.engine_eskimo import EngineEskimo
 from Configuration.configuration_handler import Configurations
 
 
@@ -8,12 +8,12 @@ FILE_PATH = r"Configuration/configuration.json"
 
 config = Configurations(FILE_PATH)
 
-engine = Engine(config.get_start_position(),
-                config.get_end_position(),
-                config.get_number_of_polygons_range(),
-                config.get_number_of_points_in_polygon_range(),
-                config.get_polygon_radius_range(),
-                config.get_surface_size())
+engine = EngineEskimo(config.get_start_position(),
+                      config.get_end_position(),
+                      config.get_number_of_polygons_range(),
+                      config.get_number_of_points_in_polygon_range(),
+                      config.get_polygon_radius_range(),
+                      config.get_surface_size())
 
 drawTool = DrawTool(config.get_surface_size())
 
