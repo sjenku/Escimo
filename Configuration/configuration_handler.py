@@ -19,22 +19,22 @@ class Configurations:
             self.polygon_radius_range = data["polygon_radius_range"]
             self.surface_size = data["surface_size"]
 
-    def get_start_position(self):
+    def get_start_position(self) -> Point:
         return Point(self.start_position["x"],self.start_position["y"])
 
-    def get_end_position(self):
+    def get_end_position(self) -> Point:
         return Point(self.end_position["x"],self.end_position["y"])
 
-    def get_number_of_polygons_range(self):
+    def get_number_of_polygons_range(self) -> dict[str, int]:
         return self.number_of_polygons_range
 
-    def get_number_of_points_in_polygon_range(self):
+    def get_number_of_points_in_polygon_range(self) -> dict[str, int]:
         return self.number_of_points_in_polygon_range
 
-    def get_polygon_radius_range(self):
+    def get_polygon_radius_range(self) -> dict[str, int]:
         return self.polygon_radius_range
 
-    def get_surface_size(self):
+    def get_surface_size(self) -> float:
         return self.surface_size
 
 

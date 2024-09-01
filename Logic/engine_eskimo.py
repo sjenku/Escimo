@@ -1,6 +1,6 @@
 import random
 import numpy as np
-from shapely import MultiPoint, Point
+from shapely import MultiPoint, Point, Polygon
 
 
 class EngineEskimo:
@@ -20,7 +20,7 @@ class EngineEskimo:
         self.polygons = []
 
 
-    def print(self):
+    def print(self) -> None:
         print("it's printing....")
         print("start_pos",self.start_pos,
               "end_pos",self.end_pos,
@@ -30,10 +30,10 @@ class EngineEskimo:
               "surface_size",self.surface_size)
 
 # - calculate random number of polygons
-    def get_number_of_polygons(self)->int:
+    def get_number_of_polygons(self) -> int:
         return self.number_of_polygons
 
-    def create_point_around_center(self,center_point,max_radius)->Point:
+    def create_point_around_center(self,center_point,max_radius) -> Point:
         # generate a random angle between 0 and 2*pi
         angle = np.random.uniform(0, 2 * np.pi)
 
@@ -46,7 +46,7 @@ class EngineEskimo:
 
         return Point(x,y)
 
-    def create_polygon(self):
+    def create_polygon(self) -> (list[Point],Polygon):
         """
            Create a polygon using the params given to the engine class.
 
@@ -91,7 +91,7 @@ class EngineEskimo:
 
         return points,convex_hull
 
-    def create_valid_polygon(self):
+    def create_valid_polygon(self) -> (list[Point],Polygon):
 
         points, new_polygon = self.create_polygon()
         valid = False
@@ -112,7 +112,7 @@ class EngineEskimo:
         self.polygons.append(new_polygon)
         return points,new_polygon
 
-    def get_metadata(self):
+    def get_metadata(self) -> dict:
         data = {
             "x_limits": self.surface_size,
             "y_limits": self.surface_size,
