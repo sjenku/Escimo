@@ -1,0 +1,23 @@
+{
+  "start_position" : {
+    "x": 22.0,
+    "y": 20.0
+  },
+  "end_position" : {
+    "x": 480.0,
+    "y": 480.0
+  },
+  "number_of_polygons_range" : {
+    "from":5,
+    "to": 7
+  },
+  "number_of_points_in_polygon_range" :{
+    "from": 10,
+    "to": 20
+  },
+  "polygon_radius_range": {
+    "from": 20,
+    "to": 50
+  },
+  "surface_size": 500
+}
