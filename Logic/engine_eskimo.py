@@ -1,23 +1,48 @@
 import random
+from email.policy import default
+
 import numpy as np
 from shapely import MultiPoint, Point, Polygon
+from pydantic import BaseModel, conint, model_validator, Field
+
+from Model.engine_point import EnginePoint
+from Model.range import Range
 
 
-class EngineEskimo:
 
-    def __init__(self,start_pos,
-                 end_pos,
-                 num_of_polygons_range,
-                 num_of_points_in_polygon_range,
-                 polygon_radius_range,
-                 surface_size):
-        self.start_pos = start_pos
-        self.end_pos = end_pos
-        self.number_of_polygons = random.randint(num_of_polygons_range["from"],num_of_polygons_range["to"])
-        self.num_of_points_in_polygon_range = num_of_points_in_polygon_range
-        self.polygon_radius_range = polygon_radius_range
-        self.surface_size = surface_size
-        self.polygons = []
+class EngineEskimo(BaseModel):
+
+# TODO: complete
+    start_position: Point
+    end_position: Point
+    number_of_polygons_range: Range
+    num_of_points_in_polygon_range : Range
+    polygon_radius_range : Range
+    surface_size : conint(ge=0)
+    polygons: list[Polygon] = []
+    _number_of_polygons: int = 0
+
+
+    def __init__(self, **data):
+        super().__init__(**data)
+        # Handle random number generation after initialization
+        # self.number_of_polygons = random.randint(
+        #     self.number_of_polygons_range.from_,
+        #     self.number_of_polygons_range.to
+
+
+    class Config:
+        arbitrary_types_allowed = True
+
+    #TODO: complete
+    @model_validator(mode = 'after')
+    def generate_number_of_polygons(self):
+        _number_of_polygons = random.randint(
+            self.number_of_polygons_range.from_,
+            self.number_of_polygons_range.to
+        )
+
+
 
 
     def print(self) -> None:
@@ -31,7 +56,7 @@ class EngineEskimo:
 
 # - calculate random number of polygons
     def get_number_of_polygons(self) -> int:
-        return self.number_of_polygons
+        return self._number_of_polygons
 
     def create_point_around_center(self,center_point,max_radius) -> Point:
         # generate a random angle between 0 and 2*pi

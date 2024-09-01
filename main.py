@@ -2,6 +2,7 @@ import json
 
 from shapely import Point
 
+from Model.range import Range
 from Utils.draw import DrawTool
 from Logic.engine_eskimo import EngineEskimo
 from Configuration.configuration_handler import Configurations
@@ -11,12 +12,14 @@ FILE_PATH = r"Configuration/configuration.json"
 
 config = Configurations(FILE_PATH)
 
-engine = EngineEskimo(config.get_start_position(),
-                      config.get_end_position(),
-                      config.get_number_of_polygons_range(),
-                      config.get_number_of_points_in_polygon_range(),
-                      config.get_polygon_radius_range(),
-                      config.get_surface_size())
+# TODO: delete this
+
+engine = EngineEskimo(start_position = config.get_start_position(),
+                      end_position = config.get_end_position(),
+                      number_of_polygons_range = Range(**config.get_number_of_polygons_range()),
+                      num_of_points_in_polygon_range = Range(**config.get_number_of_points_in_polygon_range()),
+                      polygon_radius_range = Range(**config.get_polygon_radius_range()),
+                      surface_size = config.get_surface_size())
 
 drawTool = DrawTool(config.get_surface_size())
 
