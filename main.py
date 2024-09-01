@@ -1,4 +1,7 @@
 import json
+
+from shapely import Point
+
 from Utils.draw import DrawTool
 from Logic.engine_eskimo import EngineEskimo
 from Configuration.configuration_handler import Configurations
@@ -20,11 +23,11 @@ drawTool = DrawTool(config.get_surface_size())
 # draw polygons TODO: create first by engine the polygons, and receive the list of them
 for i in range(engine.get_number_of_polygons()):
     points, convex_hull = engine.create_valid_polygon()
-    drawTool.draw_convex_hulls(points, convex_hull)
+    drawTool.draw_convex_hulls(points, convex_hull,"Iceberg " + str(i + 1))
 
 # add start_end_points
-drawTool.draw_point(config.get_start_position(),"start")
-drawTool.draw_point(config.get_end_position(),"end")
+drawTool.draw_point(config.get_start_position(),"start",'green')
+drawTool.draw_point(config.get_end_position(),"end",'red')
 
 drawTool.show()
 
