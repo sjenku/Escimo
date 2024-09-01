@@ -43,7 +43,6 @@ class DrawTool:
 
         # extract points coordinates
         x_cords, y_cords = zip(*[(point.x, point.y) for point in points])
-        print(type(x_cords))
         # plot the group of points
         self.fig.add_trace(go.Scatter(
             x=x_cords,
