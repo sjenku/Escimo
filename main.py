@@ -12,10 +12,9 @@ FILE_PATH = r"Configuration/configuration.json"
 
 config = Configurations(FILE_PATH)
 
-# TODO: delete this
 
-engine = EngineEskimo(start_position = config.get_start_position(),
-                      end_position = config.get_end_position(),
+engine = EngineEskimo(start_pos = config.get_start_position(),
+                      end_pos = config.get_end_position(),
                       number_of_polygons_range = Range(**config.get_number_of_polygons_range()),
                       num_of_points_in_polygon_range = Range(**config.get_number_of_points_in_polygon_range()),
                       polygon_radius_range = Range(**config.get_polygon_radius_range()),
@@ -23,6 +22,7 @@ engine = EngineEskimo(start_position = config.get_start_position(),
 
 drawTool = DrawTool(config.get_surface_size())
 
+print("number of polygons: ",engine.get_number_of_polygons())
 # draw polygons TODO: create first by engine the polygons, and receive the list of them
 for i in range(engine.get_number_of_polygons()):
     points, convex_hull = engine.create_valid_polygon()

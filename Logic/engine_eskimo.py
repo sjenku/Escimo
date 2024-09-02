@@ -1,20 +1,15 @@
 import random
-from email.policy import default
-
 import numpy as np
 from shapely import MultiPoint, Point, Polygon
-from pydantic import BaseModel, conint, model_validator, Field
-
-from Model.engine_point import EnginePoint
+from pydantic import BaseModel, conint, model_validator, Field, root_validator
 from Model.range import Range
 
 
 
 class EngineEskimo(BaseModel):
 
-# TODO: complete
-    start_position: Point
-    end_position: Point
+    start_pos: Point
+    end_pos: Point
     number_of_polygons_range: Range
     num_of_points_in_polygon_range : Range
     polygon_radius_range : Range
@@ -25,24 +20,15 @@ class EngineEskimo(BaseModel):
 
     def __init__(self, **data):
         super().__init__(**data)
-        # Handle random number generation after initialization
-        # self.number_of_polygons = random.randint(
-        #     self.number_of_polygons_range.from_,
-        #     self.number_of_polygons_range.to
 
 
     class Config:
-        arbitrary_types_allowed = True
+        arbitrary_types_allowed = True # we need this to support the Point type
 
-    #TODO: complete
-    @model_validator(mode = 'after')
+
+    @model_validator(mode='after')
     def generate_number_of_polygons(self):
-        _number_of_polygons = random.randint(
-            self.number_of_polygons_range.from_,
-            self.number_of_polygons_range.to
-        )
-
-
+        self._number_of_polygons = self.number_of_polygons_range.get_random()
 
 
     def print(self) -> None:
@@ -83,13 +69,13 @@ class EngineEskimo(BaseModel):
 
         # calculate random number of points from the given range
         points_in_polygon = random.randint(
-            self.num_of_points_in_polygon_range["from"],
-            self.num_of_points_in_polygon_range["to"])
+            self.num_of_points_in_polygon_range.from_,
+            self.num_of_points_in_polygon_range.to)
 
         # calculate random max radius from the given range
         max_radius = random.randint(
-            self.polygon_radius_range["from"],
-            self.polygon_radius_range["to"])
+            self.polygon_radius_range.from_,
+            self.polygon_radius_range.to)
 
         # random center point
         padding = int(self.surface_size/10) # insure that the center point not too close to surface borders
@@ -145,7 +131,7 @@ class EngineEskimo(BaseModel):
             "start_y": self.start_pos.y,
             "target_x": self.end_pos.x,
             "target_y": self.end_pos.y,
-            "icebergs_count":self.number_of_polygons,
+            "icebergs_count":self._number_of_polygons,
             }
 
         icebergs = []  # list to store all iceberg dictionaries
