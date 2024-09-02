@@ -2,6 +2,10 @@ import random
 import numpy as np
 from shapely import MultiPoint, Point, Polygon
 from pydantic import BaseModel, conint, model_validator, Field, root_validator
+
+from Data.engine_data import EngineData
+from Model.iceberg import Iceberg
+from Model.polygon_wrapper import PolygonWrapper
 from Model.range import Range
 
 
@@ -99,6 +103,7 @@ class EngineEskimo(BaseModel):
         # use convex_hull to wrap this points into a polygon
         multipoint = MultiPoint(points)
         convex_hull = multipoint.convex_hull
+        wrapper = PolygonWrapper.from_polygon(convex_hull)
 
         return points,convex_hull
 
@@ -122,6 +127,29 @@ class EngineEskimo(BaseModel):
 
         self.polygons.append(new_polygon)
         return points,new_polygon
+
+    def get_data(self) -> EngineData:
+        icebergs = []
+        for iceberg_number, polygon in enumerate(self.polygons, start=1):
+            icebergs.append(Iceberg(
+                iceberg_number = iceberg_number,
+                iceberg_points = PolygonWrapper.from_polygon(polygon)
+            ))
+
+        data = EngineData(
+            x_limits = self.surface_size,
+            y_limits = self.surface_size,
+            start_x = self.start_pos.x,
+            start_y = self.start_pos.y,
+            target_x = self.end_pos.x,
+            target_y = self.end_pos.y,
+            icebergs_count = self._number_of_polygons,
+            icebergs = icebergs
+            )
+
+        return data
+
+
 
     def get_metadata(self) -> dict:
         data = {

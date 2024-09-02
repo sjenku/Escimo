@@ -1,8 +1,7 @@
 import json
 
-from shapely import Point
-
-from Model.range import Range
+from Data.engine_data import EngineData
+from Model.iceberg import Iceberg
 from Utils.draw import DrawTool
 from Logic.engine_eskimo import EngineEskimo
 from Configuration.configuration import Configurations
@@ -38,14 +37,15 @@ drawTool.draw_point(config.end_position.point(),"end",'red')
 drawTool.show()
 
 #  data to write to the JSON file
-data = engine.get_metadata()
+#data = engine.get_metadata()
+data = engine.get_data()
 
 # file path where the JSON data will be written
 file_path = 'Data/data.json'
 
 # write data to JSON file
 with open(file_path, 'w') as file:
-    json.dump(data, file, indent=4)  # `indent=4` formats the JSON data for readability
+    json.dump(data.model_dump(), file, indent=4)  # `indent=4` formats the JSON data for readability
 
 print(f"Data successfully written to {file_path}")
 
