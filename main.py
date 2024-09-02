@@ -1,7 +1,4 @@
 import json
-
-from Data.engine_data import EngineData
-from Model.iceberg import Iceberg
 from Utils.draw import DrawTool
 from Logic.engine_eskimo import EngineEskimo
 from Configuration.configuration import Configurations
@@ -37,7 +34,6 @@ drawTool.draw_point(config.end_position.point(),"end",'red')
 drawTool.show()
 
 #  data to write to the JSON file
-#data = engine.get_metadata()
 data = engine.get_data()
 
 # file path where the JSON data will be written
