@@ -15,13 +15,13 @@ class DrawTool:
         )
 
     @staticmethod
-    def random_hex_color():
+    def random_hex_color() -> str:
         # generate a random color in HEX format
         return '#{:02x}{:02x}{:02x}'.format(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
     @staticmethod
-    def random_rgba_color(alpha=0.2):
-        # generate a random color in RGBA format."""
+    def random_rgba_color(alpha=0.2) -> str:
+        # generate a random color in RGBA format.
         r = random.randint(0, 255)
         g = random.randint(0, 255)
         b = random.randint(0, 255)
@@ -43,6 +43,7 @@ class DrawTool:
 
         # extract points coordinates
         x_cords, y_cords = zip(*[(point.x, point.y) for point in points])
+
         # plot the group of points
         self.fig.add_trace(go.Scatter(
             x=x_cords,
@@ -55,7 +56,7 @@ class DrawTool:
         # extract convex hull coordinates
         hull_x, hull_y = convex_hull.exterior.xy
 
-        #Fill the convex hull area
+        # fill the convex hull area
         self.fig.add_trace(go.Scatter(
             x=tuple(hull_x),
             y=tuple(hull_y),
@@ -78,13 +79,12 @@ class DrawTool:
         x_values = [point_a.x, point_b.x]
         y_values = [point_a.y, point_b.y]
 
-        # plot the line and the points using Plotly
+        # plot the line
         self.fig.add_trace(go.Scatter(
             x=x_values,
             y=y_values,
             mode='lines',
             line=dict(color='blue', dash='dash'),  # Line style
-            marker=dict(size=8, color='blue'),  # Marker style
             name='Line between Points'
         ))
 
