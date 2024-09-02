@@ -5,22 +5,25 @@ from shapely import Point
 from Model.range import Range
 from Utils.draw import DrawTool
 from Logic.engine_eskimo import EngineEskimo
-from Configuration.configuration_handler import Configurations
+from Configuration.configuration import Configurations
 
 
 FILE_PATH = r"Configuration/configuration.json"
 
-config = Configurations(FILE_PATH)
+with open(FILE_PATH, 'r') as file:
+    # load the JSON data into a Configurations object
+    data = json.load(file)
+    config = Configurations(**data)
 
 
-engine = EngineEskimo(start_pos = config.get_start_position(),
-                      end_pos = config.get_end_position(),
-                      number_of_polygons_range = Range(**config.get_number_of_polygons_range()),
-                      num_of_points_in_polygon_range = Range(**config.get_number_of_points_in_polygon_range()),
-                      polygon_radius_range = Range(**config.get_polygon_radius_range()),
-                      surface_size = config.get_surface_size())
+engine = EngineEskimo(start_pos = config.start_position.point(),
+                      end_pos = config.end_position.point(),
+                      number_of_polygons_range = config.number_of_polygons_range,
+                      num_of_points_in_polygon_range = config.number_of_points_in_polygon_range,
+                      polygon_radius_range = config.polygon_radius_range,
+                      surface_size = config.surface_size)
 
-drawTool = DrawTool(config.get_surface_size())
+drawTool = DrawTool(config.surface_size)
 
 print("number of polygons: ",engine.get_number_of_polygons())
 # draw polygons TODO: create first by engine the polygons, and receive the list of them
@@ -29,8 +32,8 @@ for i in range(engine.get_number_of_polygons()):
     drawTool.draw_convex_hulls(points, convex_hull,"Iceberg " + str(i + 1))
 
 # add start_end_points
-drawTool.draw_point(config.get_start_position(),"start",'green')
-drawTool.draw_point(config.get_end_position(),"end",'red')
+drawTool.draw_point(config.start_position.point(),"start",'green')
+drawTool.draw_point(config.end_position.point(),"end",'red')
 
 drawTool.show()
 
