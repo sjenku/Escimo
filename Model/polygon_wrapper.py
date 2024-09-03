@@ -2,7 +2,12 @@ from typing import Tuple
 from pydantic import BaseModel, validator, field_serializer
 from shapely import Polygon
 
+
 class PolygonWrapper(BaseModel):
+    """
+    a wrapper model for Polygon object from shapely package, used for
+    support pydantic in another classes
+    """
     coords: list[list[Tuple[float, float]]]
 
     @field_serializer("coords")
@@ -19,11 +24,11 @@ class PolygonWrapper(BaseModel):
     def to_polygon(self) -> Polygon:
         if not self.coords:
             raise ValueError("No coordinates to create Polygon")
-        # Create the Polygon object from the coordinates
+        # create the Polygon object from the coordinates
         return Polygon(self.coords[0])
 
     @classmethod
     def from_polygon(cls, polygon: Polygon) -> "PolygonWrapper":
-        # Convert Polygon to coordinates list and create a PolygonWrapper instance
+        # convert Polygon to coordinates list and create a PolygonWrapper instance
         coords = [list(polygon.exterior.coords)]
         return cls(coords=coords)

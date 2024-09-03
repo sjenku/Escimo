@@ -1,8 +1,11 @@
 from pydantic import BaseModel
 from shapely import Point
 
-# use this class to support Point class with pydantic
 class PointWrapper(BaseModel):
+    """
+       a wrapper model for Point object from shapely package, used for
+       support pydantic in another classes
+       """
     x: float
     y: float
 
