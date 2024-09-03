@@ -3,6 +3,9 @@ from Model.iceberg import Iceberg
 
 
 class EngineData(BaseModel):
+    """
+    EngineData model responsible to hold the data that created by EngineEskimo
+    """
     x_limits: conint(ge = 0)
     y_limits: conint(ge = 0)
     start_x: float
