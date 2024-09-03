@@ -8,14 +8,33 @@ from Model.iceberg import Iceberg
 from Model.polygon_wrapper import PolygonWrapper
 from Model.range import Range
 
+# helper function that creates a point around a center_point no further than the max_radius
+def create_point_around_center(center_point, max_radius) -> Point:
+
+    # generate a random angle between 0 and 2*pi
+    angle = np.random.uniform(0, 2 * np.pi)
+
+    # generate a random radius between 0 and max_radius, ensuring uniform distribution
+    radius = np.sqrt(np.random.uniform(0, max_radius ** 2))
+
+    # convert polar coordinates (radius, angle) to cartesian coordinates (x, y)
+    x = center_point.x + radius * np.cos(angle)
+    y = center_point.y + radius * np.sin(angle)
+
+    return Point(x,y)
 
 
 class EngineEskimo(BaseModel):
+    """
+    EngineEskimo is a class that responsible to create all the calculations necessary for 'Creating the Problem'
+    meaning by that, EngineEskimo calculates and creates the Polygons on random locations
+    """
 
-    start_pos: Point
-    end_pos: Point
-    number_of_polygons_range: Range
-    num_of_points_in_polygon_range : Range
+
+    start_pos: Point  # start position of the point from which we need to move toward the target
+    end_pos: Point  # end position is a position of the target
+    number_of_polygons_range: Range # the min and max number of polygons that can be created
+    num_of_points_in_polygon_range : Range # the min and max points that each polygon creat from
     polygon_radius_range : Range
     surface_size : conint(ge=0)
     polygons: list[Polygon] = []
@@ -44,32 +63,19 @@ class EngineEskimo(BaseModel):
               "polygon_radius_range",self.polygon_radius_range,
               "surface_size",self.surface_size)
 
-# - calculate random number of polygons
+    # calculate random number of polygons
     def get_number_of_polygons(self) -> int:
         return self._number_of_polygons
-
-    def create_point_around_center(self,center_point,max_radius) -> Point:
-        # generate a random angle between 0 and 2*pi
-        angle = np.random.uniform(0, 2 * np.pi)
-
-        # generate a random radius between 0 and max_radius, ensuring uniform distribution
-        radius = np.sqrt(np.random.uniform(0, max_radius ** 2))
-
-        # convert polar coordinates (radius, angle) to cartesian coordinates (x, y)
-        x = center_point.x + radius * np.cos(angle)
-        y = center_point.y + radius * np.sin(angle)
-
-        return Point(x,y)
 
     def create_polygon(self) -> (list[Point],Polygon):
         """
            Create a polygon using the params given to the engine class.
 
            Returns:
-           list[tuple[int, int]] : the points used to create a polygon
-           TODO: write the type of convex_hull
+           list[tuple[int, int]] : the points used to create a polygon.
+           Polygon: the polygon object that been created with cunvex_hull
 
-           """
+        """
 
         # calculate random number of points from the given range
         points_in_polygon = random.randint(
@@ -91,11 +97,11 @@ class EngineEskimo(BaseModel):
         points = []
         for i in range(points_in_polygon):
 
-            point = self.create_point_around_center(center_point,max_radius)
+            point = create_point_around_center(center_point,max_radius)
 
             # Ensure the point is within bounds
             while not (0 <= point.x <= self.surface_size) or not(0 <= point.y <= self.surface_size):
-                point = self.create_point_around_center(center_point,max_radius)
+                point = create_point_around_center(center_point,max_radius)
 
             # add point
             points.append(point)
@@ -177,7 +183,7 @@ class EngineEskimo(BaseModel):
                 "iceberg_points": points_dict
             }
 
-            # Add the iceberg dictionary to the list of icebergs
+            # add the iceberg dictionary to the list of icebergs
             icebergs.append(iceberg_dict)
 
         data["icebergs"] = icebergs
