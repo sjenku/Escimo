@@ -1,10 +1,11 @@
 import json
+
+from TaskCreator.Logic.engine_eskimo import EngineEskimo
 from Utils.draw import DrawTool
-from Logic.engine_eskimo import EngineEskimo
-from Configuration.configuration import Configurations
+from TaskCreator.Configuration.configuration import Configurations
 
 
-FILE_PATH = r"Configuration/configuration.json"
+FILE_PATH = r"TaskCreator/Configuration/configuration.json"
 
 with open(FILE_PATH, 'r') as file:
     # load the JSON data into a Configurations object
@@ -37,7 +38,7 @@ drawTool.show()
 data = engine.get_data()
 
 # file path where the JSON data will be written
-file_path = 'Data/data.json'
+file_path = 'TaskCreator/Data/data.json'
 
 # write data to JSON file
 with open(file_path, 'w') as file:

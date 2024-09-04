@@ -1,6 +1,6 @@
 
-from pydantic import BaseModel, conint, Field
-from Model.polygon_wrapper import PolygonWrapper
+from pydantic import BaseModel, conint
+from TaskCreator.Model.polygon_wrapper import PolygonWrapper
 
 
 

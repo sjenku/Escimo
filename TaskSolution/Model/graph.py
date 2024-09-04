@@ -1,8 +1,6 @@
-from typing import Type
-
-from pydantic import BaseModel, conint
+from pydantic import BaseModel
 from shapely import Point
-from Model.edge import Edge
+from TaskSolution.Model.edge import Edge
 
 
 class Graph(BaseModel):
