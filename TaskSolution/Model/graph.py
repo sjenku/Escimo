@@ -4,24 +4,26 @@ from TaskSolution.Model.edge import Edge
 
 
 class Graph(BaseModel):
-    points: list[Point]
+    points: list[Point] = []
     edges: list[Edge] = []
+    points_neighbours : dict[Point, set[Point]]
 
     class Config:
         arbitrary_types_allowed = True
 
     @classmethod
     def complete_graph_from_points(cls, points: list[Point]):
-        edges = []
-
-        # create edges between all the points ( undirected graph - each edge represented once regardless direction )
-        for point in points:
-            for another_point in points:
-                if point == another_point:
-                    continue
-
-
-        return cls(points=points, edges=[])
+        pass
+        # edges = []
+        #
+        # # create edges between all the points ( undirected graph - each edge represented once regardless direction )
+        # for point in points:
+        #     for another_point in points:
+        #         if point == another_point:
+        #             continue
+        #
+        #
+        # return cls(points=points, edges=[])
 
     def add_point(self,point : Point):
         if not isinstance(point, Point):
