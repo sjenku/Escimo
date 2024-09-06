@@ -1,6 +1,8 @@
 from pydantic import BaseModel
 from shapely import Point
 from TaskSolution.Model.edge import Edge
+import logging
+
 
 
 class Graph(BaseModel):
@@ -11,19 +13,17 @@ class Graph(BaseModel):
     class Config:
         arbitrary_types_allowed = True
 
-    @classmethod
-    def complete_graph_from_points(cls, points: list[Point]):
-        pass
-        # edges = []
-        #
-        # # create edges between all the points ( undirected graph - each edge represented once regardless direction )
-        # for point in points:
-        #     for another_point in points:
-        #         if point == another_point:
-        #             continue
-        #
-        #
-        # return cls(points=points, edges=[])
+
+
+    def print(self):
+        logger = logging.getLogger(__name__)
+        # Configure logging to show INFO level messages
+        logging.basicConfig(level=logging.INFO,  # Ensure this is set to INFO or lower
+                            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        logger.info("Points Neighbours: ")
+        logger.info(self.points_neighbours)
+
+
 
     def add_point(self,point : Point):
         if not isinstance(point, Point):
