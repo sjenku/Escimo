@@ -9,19 +9,21 @@ class Graph(BaseModel):
     points: list[Point] = []
     edges: list[Edge] = []
     points_neighbours : dict[Point, set[Point]]
+    _logger : logging.Logger = logging.getLogger(__name__)
 
     class Config:
         arbitrary_types_allowed = True
 
-
-
-    def print(self):
-        logger = logging.getLogger(__name__)
+    def __init__(self, **data):
+        super().__init__(**data)
         # Configure logging to show INFO level messages
         logging.basicConfig(level=logging.INFO,  # Ensure this is set to INFO or lower
                             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        logger.info("Points Neighbours: ")
-        logger.info(self.points_neighbours)
+
+
+    def print(self):
+        self._logger.info("Points Neighbours: ")
+        self._logger.info(self.points_neighbours)
 
 
 
