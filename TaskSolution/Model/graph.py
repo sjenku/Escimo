@@ -8,7 +8,7 @@ import logging
 class Graph(BaseModel):
     points: list[Point] = []
     edges: list[Edge] = []
-    points_neighbours : dict[Point, set[Point]]
+    points_neighbours : dict[Point, set[Point]] # for every point, hold who is the neighbours of that point
     _logger : logging.Logger = logging.getLogger(__name__)
 
     class Config:
@@ -22,8 +22,7 @@ class Graph(BaseModel):
 
 
     def print(self):
-        self._logger.info("Points Neighbours: ")
-        self._logger.info(self.points_neighbours)
+        self._logger.info(str(self))
 
 
 
@@ -42,3 +41,14 @@ class Graph(BaseModel):
 
     def get_points(self) -> list[Point]:
         return self.points
+
+    def __str__(self):
+        st = "Graph : \n"
+        st += "Points neighbours =================== : \n"
+        for point in self.points_neighbours:
+            st += f"{point}: {self.points_neighbours[point]}\n"
+        st += "Edges =============================== : \n"
+        for edge in self.edges:
+            st += f"{edge}\n"
+        return st
+

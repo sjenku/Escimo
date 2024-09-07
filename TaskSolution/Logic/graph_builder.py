@@ -1,6 +1,4 @@
-from collections import defaultdict
-
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from shapely import Point, Polygon
 from TaskSolution.Model.edge import Edge
 from TaskSolution.Model.graph import Graph
@@ -26,7 +24,7 @@ class GraphBuilder(BaseModel):
         super().__init__(**data)
         self._unpack_points_from_polygons()
         self._points.append(self.start_point)
-        self._points.append(self.start_point)
+        self._points.append(self.end_point)
 
     class Config:
         arbitrary_types_allowed = True
