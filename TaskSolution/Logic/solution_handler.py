@@ -1,12 +1,12 @@
 import heapq
+from itertools import combinations
 from typing import Optional, List
 
 from pydantic import BaseModel
 from shapely import Point
 
 from TaskSolution.Model.graph import Graph
-
-
+from TaskSolution.Model.undirected_edge import UndirectedEdge
 
 
 class SolutionHandler(BaseModel):
@@ -60,3 +60,13 @@ class SolutionHandler(BaseModel):
                     heapq.heappush(open_set, new_item)
 
         return None
+
+    @staticmethod
+    def point_path_to_edges(points) -> List[UndirectedEdge]:
+        """ convert path that represented as list of points, to a list of edges"""
+        edges = []
+        for i in range(len(points) - 1):
+            point_from = points[i]
+            point_to = points[i + 1]
+            edges.append(UndirectedEdge(point1 = point_from, point2 = point_to))
+        return edges

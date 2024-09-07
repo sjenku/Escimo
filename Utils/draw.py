@@ -73,7 +73,7 @@ class DrawTool:
         self.fig.show()
 
 
-    def draw_line_between_points(self,point_a,point_b) -> None:
+    def draw_line_between_points(self,point_a,point_b,color = "blue") -> None:
 
         # unpack the points into x and y coordinates
         x_values = [point_a.x, point_b.x]
@@ -84,7 +84,7 @@ class DrawTool:
             x=x_values,
             y=y_values,
             mode='lines',
-            line=dict(color='blue', dash='dash'),  # Line style
+            line=dict(color=color, dash='dash'),  # Line style
             name='Line between Points'
         ))
 
