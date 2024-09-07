@@ -8,7 +8,7 @@ import logging
 class Graph(BaseModel):
     points: list[Point] = []
     edges: list[Edge] = []
-    points_neighbours : dict[Point, set[Point]] # for every point, hold who is the neighbours of that point
+    _points_neighbours : dict[Point, set[Point]] = {}# for every point, hold who is the neighbours of that point
     _logger : logging.Logger = logging.getLogger(__name__)
 
     class Config:
@@ -19,6 +19,16 @@ class Graph(BaseModel):
         # Configure logging to show INFO level messages
         logging.basicConfig(level=logging.INFO,  # Ensure this is set to INFO or lower
                             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        self._set_points_neighbours()
+
+    def _set_points_neighbours(self):
+        for edge in self.edges:
+            point = edge.point1
+            another_point = edge.point2
+            if point in self._points_neighbours:
+                self._points_neighbours[point].add(another_point)
+            else:
+                self._points_neighbours[point] = {another_point, }
 
 
     def print(self):
@@ -45,8 +55,8 @@ class Graph(BaseModel):
     def __str__(self):
         st = "Graph : \n"
         st += "Points neighbours =================== : \n"
-        for point in self.points_neighbours:
-            st += f"{point}: {self.points_neighbours[point]}\n"
+        for point in self._points_neighbours:
+            st += f"{point}: {self._points_neighbours[point]}\n"
         st += "Edges =============================== : \n"
         for edge in self.edges:
             st += f"{edge}\n"

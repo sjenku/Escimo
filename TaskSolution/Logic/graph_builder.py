@@ -13,51 +13,46 @@ class GraphBuilder(BaseModel):
     end_point:Point
     polygons : list[Polygon]
     """
-    _points : list[Point] = []
     polygons : list[Polygon]
-    _points_neighbours : dict[Point, set[Point]] = {}
-    _edges : list[Edge] = []
     start_point : Point
     end_point : Point
 
-    def __init__(self, **data):
-        super().__init__(**data)
-        self._unpack_points_from_polygons()
-        self._points.append(self.start_point)
-        self._points.append(self.end_point)
 
     class Config:
         arbitrary_types_allowed = True
 
-    def _unpack_points_from_polygons(self):
+    def _unpack_points_from_polygons(self) -> list[Point]:
+        points = []
         for polygon in self.polygons:
             for point in polygon.exterior.coords:
-                self._points.append(Point(point))
+                points.append(Point(point))
+        return points
 
 
     def build(self) -> Graph:
-        for point in self._points:
-            for another_point in self._points:
+        points = self._unpack_points_from_polygons()
+        points.append(self.start_point)
+        points.append(self.end_point)
+        edges = []
+
+        for point in points:
+            for another_point in points:
                 if point == another_point:
                     continue
 
                 new_edge = Edge(point1 = point,point2 = another_point)
-                self._edges.append(new_edge)
-                if point in self._points_neighbours:
-                    self._points_neighbours[point].add(another_point)
-                else:
-                    self._points_neighbours[point] = {another_point, }
 
-        # delete the edges if they inside the polygon, and update the points neighbours
-        for edge in self._edges:
-            for polygon in self.polygons:
-                if edge.is_in_polygon(polygon):
-                    try:
-                        self._points_neighbours[edge.point1].remove(edge.point2)
-                        self._points_neighbours[edge.point2].remove(edge.point1)
-                    except KeyError: pass
+                # check if the edge overlapping the polygons
+                edge_in_polygon = False
+                for polygon in self.polygons:
+                    if new_edge.is_in_polygon(polygon):
+                        edge_in_polygon = True
 
-        # TODO: pass a copy and not the reference
-        return Graph(points = self._points, edges = self._edges, points_neighbours = self._points_neighbours)
+                if not edge_in_polygon:
+                    edges.append(new_edge)
+
+
+
+        return Graph(points = points, edges = edges)
 
 
