@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from shapely import Point, Polygon
-from TaskSolution.Model.edge import Edge
 from TaskSolution.Model.graph import Graph
+from TaskSolution.Model.undirected_edge import UndirectedEdge
 
 
 class GraphBuilder(BaseModel):
@@ -40,7 +40,7 @@ class GraphBuilder(BaseModel):
                 if point == another_point:
                     continue
 
-                new_edge = Edge(point1 = point,point2 = another_point)
+                new_edge = UndirectedEdge(point1 = point, point2 = another_point)
 
                 # check if the edge overlapping the polygons
                 edge_in_polygon = False
@@ -48,7 +48,7 @@ class GraphBuilder(BaseModel):
                     if new_edge.is_in_polygon(polygon):
                         edge_in_polygon = True
 
-                if not edge_in_polygon:
+                if not edge_in_polygon and new_edge not in edges:
                     edges.append(new_edge)
 
 

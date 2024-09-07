@@ -2,7 +2,7 @@ from pydantic import BaseModel, validator, field_validator
 from shapely import Point, LineString
 
 
-class Edge(BaseModel):
+class UndirectedEdge(BaseModel):
     point1 : Point
     point2 : Point
 
@@ -24,7 +24,11 @@ class Edge(BaseModel):
     def is_in_polygon(self,polygon):
         return polygon.contains(self.to_linestring()) or self.to_linestring().crosses(polygon) or self.to_linestring().overlaps(polygon)
 
-
+    def __eq__(self, other):
+        if not isinstance(other, UndirectedEdge):
+            return NotImplemented
+        return (self.point1 == other.point1 and self.point2 == other.point2) or \
+            (self.point1 == other.point2 and self.point2 == other.point1)
 
 
 

@@ -1,13 +1,13 @@
 from pydantic import BaseModel
 from shapely import Point
-from TaskSolution.Model.edge import Edge
+from TaskSolution.Model.undirected_edge import UndirectedEdge
 import logging
 
 
 
 class Graph(BaseModel):
     points: list[Point] = []
-    edges: list[Edge] = []
+    edges: list[UndirectedEdge] = []
     _points_neighbours : dict[Point, set[Point]] = {}# for every point, hold who is the neighbours of that point
     _logger : logging.Logger = logging.getLogger(__name__)
 
@@ -25,10 +25,15 @@ class Graph(BaseModel):
         for edge in self.edges:
             point = edge.point1
             another_point = edge.point2
+            # because undirected edge, update both points neighbours
             if point in self._points_neighbours:
                 self._points_neighbours[point].add(another_point)
             else:
                 self._points_neighbours[point] = {another_point, }
+            if another_point in self._points_neighbours:
+                self._points_neighbours[another_point].add(point)
+            else:
+                self._points_neighbours[another_point] = {point, }
 
 
     def print(self):
@@ -44,9 +49,9 @@ class Graph(BaseModel):
     def add_edge(self, point1: Point, point2: Point):
         if point1 not in self.points or point2 not in self.points:
             raise ValueError("Both points must be in the graph.")
-        self.edges.append(Edge(point1=point1, point2=point2))
+        self.edges.append(UndirectedEdge(point1=point1, point2=point2))
 
-    def get_edges(self) -> list[Edge]:
+    def get_edges(self) -> list[UndirectedEdge]:
         return self.edges
 
     def get_points(self) -> list[Point]:
