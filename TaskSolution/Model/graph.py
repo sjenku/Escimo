@@ -35,6 +35,9 @@ class Graph(BaseModel):
             else:
                 self._points_neighbours[another_point] = {point, }
 
+    def get_neighbours(self, point: Point) -> set[Point]:
+        return self._points_neighbours.get(point, set())
+
 
     def print(self):
         self._logger.info(str(self))
