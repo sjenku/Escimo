@@ -1,5 +1,5 @@
 from pydantic import conint, BaseModel
-from TaskCreator.Model.point_wrapper import PointWrapper
+from Module.point_wrapper import PointWrapper
 from TaskCreator.Model.range import Range
 
 

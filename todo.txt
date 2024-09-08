@@ -1,4 +1,0 @@
-1) do function that check if Edge overlapping polygon
-2) graph builder class - will create the graph for solution
-    - it should get points, polygons
-    - the graph must not have an edges that overlapping

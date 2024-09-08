@@ -1,10 +1,11 @@
 from pydantic import BaseModel, conint
-from TaskCreator.Model.iceberg import Iceberg
+
+from TaskSolution.Model.iceberg import Iceberg
 
 
-class EngineData(BaseModel):
+class InputData(BaseModel):
     """
-    EngineData model responsible to hold the data that created by EngineEskimo
+    InputData model responsible to hold the data that created by EngineEskimo
     """
     x_limits: conint(ge = 0)
     y_limits: conint(ge = 0)

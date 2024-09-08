@@ -8,7 +8,7 @@ import logging
 class Graph(BaseModel):
     points: list[Point] = []
     edges: list[UndirectedEdge] = []
-    _points_neighbours : dict[Point, set[Point]] = {}# for every point, hold who is the neighbours of that point
+    _points_neighbours : dict[Point, set[Point]] = {} # for every point, hold who is the neighbours of that point
     _logger : logging.Logger = logging.getLogger(__name__)
 
     class Config:
