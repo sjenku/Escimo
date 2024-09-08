@@ -1,6 +1,8 @@
 import plotly.graph_objects as go
 from numpy import random
 
+from TaskSolution.Model.graph import Graph
+
 
 class DrawTool:
 
@@ -87,4 +89,9 @@ class DrawTool:
             line=dict(color=color, dash='dash'),  # Line style
             name='Line between Points'
         ))
+
+    #TODO: continue
+    def draw_graph(self,graph:Graph) -> None:
+        pass
+
 
