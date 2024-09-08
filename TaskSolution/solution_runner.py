@@ -1,6 +1,6 @@
 import json
-from TaskSolution.Model.input_data import InputData
 
+from Module.engine_data import EngineData
 
 class SolutionRunner:
     @staticmethod
@@ -9,8 +9,11 @@ class SolutionRunner:
         file_path = r"TaskCreator/Data/data.json"
 
         with open(file_path, 'r') as file:
-            # load the JSON data into a Configurations object
+            # load the JSON and parse this json
             data = json.load(file)
-            input_data = InputData(**data)
-            print(input_data)
+            engine_data = EngineData(**data)
+            print(engine_data)
 
+
+
+        graph_builder = GraphBuilder(start_point=Point(1, 1), end_point=Point(5, 2), polygons=polygons)

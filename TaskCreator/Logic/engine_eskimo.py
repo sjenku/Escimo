@@ -3,8 +3,11 @@ import numpy as np
 from shapely import MultiPoint, Point, Polygon
 from pydantic import BaseModel, conint, model_validator
 
+from Module.coords import Coords
 from Module.engine_data import EngineData
 from Module.iceberg import Iceberg
+from Module.iceberg_points import IcebergPoints
+from Module.point_wrapper import PointWrapper
 from Module.polygon_wrapper import PolygonWrapper
 from TaskCreator.Model.range import Range
 
@@ -134,12 +137,21 @@ class EngineEskimo(BaseModel):
         self.polygons.append(new_polygon)
         return points,new_polygon
 
+
     def get_data(self) -> EngineData:
         icebergs = []
         for iceberg_number, polygon in enumerate(self.polygons, start=1):
+
+            coords_dict = {}
+            point_counter = 1
+            for coord in polygon.exterior.coords:
+                key = f'point{point_counter}'
+                coords_dict[key] = PointWrapper(x = coord[0], y = coord[1])
+                point_counter += 1
+
             icebergs.append(Iceberg(
                 iceberg_number = iceberg_number,
-                iceberg_points = PolygonWrapper.from_polygon(polygon)
+                iceberg_points = IcebergPoints(coords_dict)
             ))
 
         data = EngineData(
