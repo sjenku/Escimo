@@ -3,18 +3,27 @@ from numpy import random
 
 from TaskSolution.Model.graph import Graph
 
-
+""" DrawTool is a Singleton"""
 class DrawTool:
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super(DrawTool, cls).__new__(cls)
+        return cls._instance
 
     def __init__(self,surface_size):
-        # initialize the figure
-        self.fig = go.Figure()
+        if not hasattr(self, 'initialized'):  # Only initialize once
+            # initialize the figure
+            self.fig = go.Figure()
 
-        # set the x and y axis limits
-        self.fig.update_layout(
-            xaxis=dict(range=[0, surface_size]),
-            yaxis=dict(range=[0, surface_size])
-        )
+            # set the x and y axis limits
+            self.fig.update_layout(
+                xaxis=dict(range=[0, surface_size]),
+                yaxis=dict(range=[0, surface_size])
+            )
+            self.initialized = True
+
 
     @staticmethod
     def random_hex_color() -> str:
@@ -75,7 +84,7 @@ class DrawTool:
         self.fig.show()
 
 
-    def draw_line_between_points(self,point_a,point_b,color = "blue") -> None:
+    def draw_line_between_points(self,point_a,point_b,color = "rgba(0, 0, 255, 0.2)",name = None,is_solid_line = False) -> None:
 
         # unpack the points into x and y coordinates
         x_values = [point_a.x, point_b.x]
@@ -86,12 +95,16 @@ class DrawTool:
             x=x_values,
             y=y_values,
             mode='lines',
-            line=dict(color=color, dash='dash'),  # Line style
-            name='Line between Points'
+            line=dict(color=color, dash='solid' if is_solid_line else 'dot'),  # Line style
+            name=name,
+            showlegend= False if name is None else True,
         ))
 
     #TODO: continue
     def draw_graph(self,graph:Graph) -> None:
-        pass
+        for point in graph.points:
+            self.draw_point(point)
+        for edge in graph.edges:
+            self.draw_line_between_points(edge.point1,edge.point2)
 
 

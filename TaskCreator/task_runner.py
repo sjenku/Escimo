@@ -8,13 +8,7 @@ from TaskCreator.Configuration.configuration import Configurations
 class TaskRunner:
 
     @staticmethod
-    def run():
-        file_path = r"TaskCreator/Configuration/configuration.json"
-
-        with open(file_path, 'r') as file:
-            # load the JSON data into a Configurations object
-            data = json.load(file)
-            config = Configurations(**data)
+    def run(draw_tool: DrawTool,config: Configurations):
 
         engine = EngineEskimo(start_pos=config.start_position.point(),
                               end_pos=config.end_position.point(),
@@ -23,7 +17,7 @@ class TaskRunner:
                               polygon_radius_range=config.polygon_radius_range,
                               surface_size=config.surface_size)
 
-        draw_tool = DrawTool(config.surface_size)
+        # draw_tool = DrawTool(config.surface_size)
 
         print("number of polygons: ", engine.get_number_of_polygons())
         # draw polygons TODO: create first by engine the polygons, and receive the list of them
@@ -35,7 +29,6 @@ class TaskRunner:
         draw_tool.draw_point(config.start_position.point(), "start", 'green')
         draw_tool.draw_point(config.end_position.point(), "end", 'red')
 
-        draw_tool.show()
 
         #  data to write to the JSON file
         data = engine.get_data()
