@@ -64,7 +64,12 @@ class GraphBuilder(BaseModel):
         return Graph(points = points, edges = edges)
 
 
-    def build(self) -> Graph:
+    def build(self,surface_size,build_with_prm = False) -> Graph:
+        if build_with_prm:
+            num_samples = int(surface_size / 1.5)
+            connect_radius = int(surface_size / 10)
+            return self.prm(num_samples,connect_radius)
+
         points = self._unpack_points_from_polygons()
         points.append(self.start_point)
         points.append(self.end_point)

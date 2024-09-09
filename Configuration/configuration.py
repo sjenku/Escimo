@@ -11,4 +11,5 @@ class Configurations(BaseModel):
     number_of_points_in_polygon_range: Range
     polygon_radius_range : Range
     surface_size : conint(ge = 0)
+    build_graph_with_prm: bool
 

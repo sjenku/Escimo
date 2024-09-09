@@ -19,7 +19,7 @@ taskRunner = TaskRunner()
 taskRunner.run(draw_tool= draw_tool,config= config)
 
 solutionRunner = SolutionRunner()
-solutionRunner.run(draw_tool= draw_tool)
+solutionRunner.run(draw_tool= draw_tool,config= config)
 
 draw_tool.show()
 
