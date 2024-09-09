@@ -34,7 +34,7 @@ class SolutionRunner:
         # build the graph
         graph_builder = GraphBuilder(start_point=start_point, end_point=end_point, polygons=polygons_list)
         start_time = datetime.now()  # record the start time
-        graph = graph_builder.build()
+        graph = graph_builder.prm(engine_data.icebergs_count * 50,50) #TODO: handle magic numbers
         end_time = datetime.now() # record the end time
         print("Graph Time Build => ", end_time - start_time)
 

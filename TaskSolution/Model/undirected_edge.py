@@ -24,6 +24,13 @@ class UndirectedEdge(BaseModel):
     def is_in_polygon(self,polygon):
         return polygon.contains(self.to_linestring()) or self.to_linestring().crosses(polygon) or self.to_linestring().overlaps(polygon)
 
+    def is_in_polygons(self,polygons):
+        in_polygon = False
+        for polygon in polygons:
+            if self.is_in_polygon(polygon):
+                in_polygon = True
+        return in_polygon
+
     def __eq__(self, other):
         if not isinstance(other, UndirectedEdge):
             return NotImplemented
