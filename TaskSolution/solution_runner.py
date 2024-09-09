@@ -1,8 +1,7 @@
 import json
+from datetime import datetime
 
 from shapely import Point
-from shapely.lib import polygons
-
 from Module.engine_data import EngineData
 from TaskSolution.Logic.graph_builder import GraphBuilder
 from TaskSolution.Logic.solution_handler import SolutionHandler
@@ -34,8 +33,12 @@ class SolutionRunner:
 
         # build the graph
         graph_builder = GraphBuilder(start_point=start_point, end_point=end_point, polygons=polygons_list)
+        start_time = datetime.now()  # record the start time
         graph = graph_builder.build()
-        graph.print()
+        end_time = datetime.now() # record the end time
+        print("Graph Time Build => ", end_time - start_time)
+
+        # graph.print()
 
         # draw to the screen the graph
         for edge in graph.edges:
@@ -43,7 +46,10 @@ class SolutionRunner:
 
         # run the solution:
         solution_handler = SolutionHandler()
+        start_time = datetime.now()  # record the start time
         solution = solution_handler.a_star(graph,start_point,end_point)
+        end_time = datetime.now() # record the end time
+        print("Find The Path => ", end_time - start_time)
 
         # draw the path
         solution_edges = solution_handler.point_path_to_edges(solution)

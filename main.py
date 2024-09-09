@@ -1,11 +1,11 @@
 import json
 
-from TaskCreator.Configuration.configuration import Configurations
+from Configuration.configuration import Configurations
 from TaskCreator.task_runner import TaskRunner
 from TaskSolution.solution_runner import SolutionRunner
 from Utils.draw import DrawTool
 
-file_path = r"TaskCreator/Configuration/configuration.json"
+file_path = r"Configuration/configuration.json"
 
 with open(file_path, 'r') as file:
     # load the JSON data into a Configurations object

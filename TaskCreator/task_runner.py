@@ -1,8 +1,11 @@
 import json
+from datetime import datetime
+
+from shapely.lib import convex_hull
 
 from TaskCreator.Logic.engine_eskimo import EngineEskimo
 from Utils.draw import DrawTool
-from TaskCreator.Configuration.configuration import Configurations
+from Configuration.configuration import Configurations
 
 
 class TaskRunner:
@@ -17,13 +20,22 @@ class TaskRunner:
                               polygon_radius_range=config.polygon_radius_range,
                               surface_size=config.surface_size)
 
-        # draw_tool = DrawTool(config.surface_size)
 
         print("number of polygons: ", engine.get_number_of_polygons())
+        # create polygons
+        cunvex_hulls = []
+        points = []
+        start_time = datetime.now()
+        for i in range(engine.get_number_of_polygons()):
+            point, convex = engine.create_valid_polygon()
+            cunvex_hulls.append(convex)
+            points.append(point)
+        end_time = datetime.now()
+        print("Build polygons => ",end_time - start_time)
+
         # draw polygons TODO: create first by engine the polygons, and receive the list of them
         for i in range(engine.get_number_of_polygons()):
-            points, convex_hull = engine.create_valid_polygon()
-            draw_tool.draw_convex_hulls(points, convex_hull, "Iceberg " + str(i + 1))
+            draw_tool.draw_convex_hulls(points[i], cunvex_hulls[i], "Iceberg " + str(i + 1))
 
         # add start_end_points
         draw_tool.draw_point(config.start_position.point(), "start", 'green')
