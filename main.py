@@ -1,6 +1,7 @@
 import json
 
 from Configuration.configuration import Configurations
+from Statistics.statistics import Statistics
 from TaskCreator.task_runner import TaskRunner
 from TaskSolution.solution_runner import SolutionRunner
 from Utils.draw import DrawTool
@@ -22,5 +23,8 @@ solutionRunner = SolutionRunner()
 solutionRunner.run(draw_tool= draw_tool,config= config)
 
 draw_tool.show()
+
+statistics = Statistics()
+statistics.write()
 
 
