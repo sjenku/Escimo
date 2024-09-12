@@ -3,9 +3,10 @@ import random
 from pydantic import BaseModel
 from scipy.spatial import KDTree
 from shapely import Point, Polygon
+
+from Statistics.statistics_singleton import StatisticsSingleton
 from TaskSolution.Model.graph import Graph
 from TaskSolution.Model.undirected_edge import UndirectedEdge
-
 
 class GraphBuilder(BaseModel):
     """
@@ -31,14 +32,18 @@ class GraphBuilder(BaseModel):
                 points.append(Point(point))
         return points
 
-    def prm(self,num_samples,connect_radius) -> Graph:
+    def prm(self,num_samples,connect_radius,surface_size) -> Graph:
         """ the number of """
+        # add statistics
+        statistic = StatisticsSingleton()
+        statistic.prm_num_of_samples = num_samples
+        statistic.prm_radius = connect_radius
         points:list[Point] = [self.start_point, self.end_point]
 
         # Randomly sample points
         for _ in range(num_samples - 2):
-            x = random.randint(0, 500 - 1)  #TODO: change to surface size
-            y = random.randint(0, 500 - 1)
+            x = random.randint(0,surface_size - 1)
+            y = random.randint(0,surface_size - 1)
             is_point_in_polygon = False
             for polygon in self.polygons:
                 if polygon.contains(Point(x, y)):
@@ -68,7 +73,7 @@ class GraphBuilder(BaseModel):
         if build_with_prm:
             num_samples = int(surface_size / 1.5)
             connect_radius = int(surface_size / 10)
-            return self.prm(num_samples,connect_radius)
+            return self.prm(num_samples,connect_radius,surface_size)
 
         points = self._unpack_points_from_polygons()
         points.append(self.start_point)

@@ -5,6 +5,7 @@ from shapely import Point
 
 from Configuration.configuration import Configurations
 from Module.engine_data import EngineData
+from Statistics.statistics_singleton import StatisticsSingleton
 from TaskSolution.Logic.graph_builder import GraphBuilder
 from TaskSolution.Logic.solution_handler import SolutionHandler
 from Utils.converter import Converter
@@ -14,6 +15,10 @@ from Utils.draw import DrawTool
 class SolutionRunner:
     @staticmethod
     def run(draw_tool:DrawTool,config:Configurations):
+
+        # handle statistics
+        statistic = StatisticsSingleton()
+
         print("Solution Runner run ")
         file_path = r"TaskCreator/Data/data.json"
 
@@ -38,9 +43,17 @@ class SolutionRunner:
         start_time = datetime.now()  # record the start time
         graph = graph_builder.build(build_with_prm=config.build_graph_with_prm,surface_size=config.surface_size)
         end_time = datetime.now()  # record the end time
-        print("Graph Time Build => ", end_time - start_time)
 
-        # graph.print()
+        # add to statistics info
+        statistic.build_graph_time = end_time - start_time
+        statistic.number_of_nodes = len(graph.get_points())
+        statistic.number_of_edges = len(graph.get_edges())
+        if config.build_graph_with_prm:
+            statistic.build_graph_algo = "prm"
+        else:
+            statistic.build_graph_algo = "node to node"
+
+        print("Graph Time Build => ", statistic.build_graph_time)
 
         # draw to the screen the graph
         for edge in graph.edges:
@@ -49,9 +62,10 @@ class SolutionRunner:
         # run the solution:
         solution_handler = SolutionHandler()
         start_time = datetime.now()  # record the start time
-        solution = solution_handler.a_star(graph,start_point,end_point)
+        solution = solution_handler.a_star(graph,start_point,end_point) #TODO:handle the case when no solution found
         end_time = datetime.now() # record the end time
-        print("Find The Path => ", end_time - start_time)
+        statistic.find_path_time = end_time - start_time
+        print("Find The Path => ", statistic.find_path_time)
 
         # draw the path
         solution_edges = solution_handler.point_path_to_edges(solution)

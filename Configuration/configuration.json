@@ -20,5 +20,5 @@
     "to": 50
   },
   "surface_size": 500,
-  "build_graph_with_prm": false
+  "build_graph_with_prm": true
 }

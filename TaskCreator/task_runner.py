@@ -1,8 +1,7 @@
 import json
 from datetime import datetime
 
-from shapely.lib import convex_hull
-
+from Statistics.statistics_singleton import StatisticsSingleton
 from TaskCreator.Logic.engine_eskimo import EngineEskimo
 from Utils.draw import DrawTool
 from Configuration.configuration import Configurations
@@ -13,6 +12,9 @@ class TaskRunner:
     @staticmethod
     def run(draw_tool: DrawTool,config: Configurations):
 
+        # handle statistics
+        statistics = StatisticsSingleton()
+
         engine = EngineEskimo(start_pos=config.start_position.point(),
                               end_pos=config.end_position.point(),
                               number_of_polygons_range=config.number_of_polygons_range,
@@ -22,6 +24,8 @@ class TaskRunner:
 
 
         print("number of polygons: ", engine.get_number_of_polygons())
+        statistics.number_of_polygons = engine.get_number_of_polygons()
+
         # create polygons
         cunvex_hulls = []
         points = []
