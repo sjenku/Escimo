@@ -62,14 +62,18 @@ class SolutionRunner:
         # run the solution:
         solution_handler = SolutionHandler()
         start_time = datetime.now()  # record the start time
-        solution = solution_handler.a_star(graph,start_point,end_point) #TODO:handle the case when no solution found
+        solution = solution_handler.a_star(graph,start_point,end_point)
         end_time = datetime.now() # record the end time
         statistic.find_path_time = end_time - start_time
         print("Find The Path => ", statistic.find_path_time)
 
         # draw the path
-        solution_edges = solution_handler.point_path_to_edges(solution)
-        for i,edge in enumerate(solution_edges):
-            draw_tool.draw_line_between_points(edge.point1, edge.point2,"green",f"Edge{i+1}",True)
+        if solution is not None:
+            statistic.found_path = True
+            solution_edges = solution_handler.point_path_to_edges(solution)
+            for i,edge in enumerate(solution_edges):
+                draw_tool.draw_line_between_points(edge.point1, edge.point2,"green",f"Edge{i+1}",True)
+        else:
+            statistic.found_path = False
 
 

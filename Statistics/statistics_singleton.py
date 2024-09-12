@@ -18,6 +18,9 @@ class StatisticsSingleton:
     number_of_polygons:int = 0
     prm_num_of_samples:int = 0
     prm_radius:float = 0.0
+    polygons_radius_from:float = 0.0
+    polygons_radius_to:float = 0.0
+    found_path:bool = False
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
@@ -49,7 +52,10 @@ class StatisticsSingleton:
                                  'number of edges',
                                  'number of polygons',
                                  'prm_num_of_samples',
-                                 'prm_radius'])
+                                 'prm_radius',
+                                 'polygons radius from',
+                                 'polygons radius to',
+                                 'found path'])
 
             # Define the new data to be added
             new_data = [self.build_graph_algo,
@@ -59,7 +65,10 @@ class StatisticsSingleton:
                         self.number_of_edges,
                         self.number_of_polygons,
                         self.prm_num_of_samples,
-                        self.prm_radius]
+                        self.prm_radius,
+                        self.polygons_radius_from,
+                        self.polygons_radius_to,
+                        self.found_path]
 
             # Write the new data row
             writer.writerow(new_data)
