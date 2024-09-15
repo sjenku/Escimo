@@ -2,7 +2,7 @@ from typing import Tuple
 from pydantic import BaseModel, validator, field_serializer
 from shapely import Polygon
 
-
+#TODO: check if we need this
 class PolygonWrapper(BaseModel):
     """
     a wrapper model for Polygon object from shapely package, used for

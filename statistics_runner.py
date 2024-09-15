@@ -5,7 +5,7 @@ import sys
 python_interpreter = sys.executable  # Uses the same Python interpreter as the current script
 
 # Number of times to run the script
-NUM_RUNS = 998
+NUM_RUNS = 50
 
 
 for i in range(NUM_RUNS):

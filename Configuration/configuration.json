@@ -8,7 +8,7 @@
     "y": 480.0
   },
   "number_of_polygons_range" : {
-    "from":5,
+    "from":15,
     "to": 15
   },
   "number_of_points_in_polygon_range" :{
@@ -20,5 +20,5 @@
     "to": 50
   },
   "surface_size": 500,
-  "build_graph_with_prm": false
+  "build_graph_with_prm": true
 }
