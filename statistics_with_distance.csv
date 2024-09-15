@@ -1,0 +1,5 @@
+build graph algo,build graph time,find path time,number of nodes,number of edges,number of polygons,prm_num_of_samples,prm_radius,polygons radius from,polygons radius to,found path,distance start to end,result path distance
+prm,0:00:01.167848,0:00:00.053020,318,3212,5,333,50,20,50,True,649.1255656650723,713.7290584664255
+prm,0:00:01.261218,0:00:00.030879,327,3445,5,333,50,20,50,True,649.1255656650723,685.5655043608524
+node to node,0:00:03.863990,0:00:00.002989,46,309,5,0,0.0,20,50,True,649.1255656650723,651.7310313181888
+node to node,0:00:02.117530,0:00:00.000993,42,211,5,0,0.0,20,50,True,649.1255656650723,650.7436119318675

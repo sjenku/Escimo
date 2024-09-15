@@ -21,6 +21,9 @@ class StatisticsSingleton:
     polygons_radius_from:float = 0.0
     polygons_radius_to:float = 0.0
     found_path:bool = False
+    distance_start_to_end_point:float = 0.0
+    result_path_distance:float = 0.0
+
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
@@ -34,7 +37,7 @@ class StatisticsSingleton:
 
     def write(self):
 
-        filename = 'statistics.csv'
+        filename = 'statistics_with_distance.csv'
 
         # Check if the file exists
         file_exists = os.path.isfile(filename)
@@ -55,7 +58,9 @@ class StatisticsSingleton:
                                  'prm_radius',
                                  'polygons radius from',
                                  'polygons radius to',
-                                 'found path'])
+                                 'found path',
+                                 'distance start to end',
+                                 'result path distance'])
 
             # Define the new data to be added
             new_data = [self.build_graph_algo,
@@ -68,7 +73,9 @@ class StatisticsSingleton:
                         self.prm_radius,
                         self.polygons_radius_from,
                         self.polygons_radius_to,
-                        self.found_path]
+                        self.found_path,
+                        self.distance_start_to_end_point,
+                        self.result_path_distance]
 
             # Write the new data row
             writer.writerow(new_data)

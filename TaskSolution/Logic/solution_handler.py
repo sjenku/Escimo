@@ -62,7 +62,7 @@ class SolutionHandler(BaseModel):
         return None
 
     @staticmethod
-    def point_path_to_edges(points) -> List[UndirectedEdge]:
+    def point_path_to_edges(points: List[Point]) -> List[UndirectedEdge]:
         """ convert path that represented as list of points, to a list of edges"""
         edges = []
         for i in range(len(points) - 1):
@@ -70,3 +70,13 @@ class SolutionHandler(BaseModel):
             point_to = points[i + 1]
             edges.append(UndirectedEdge(point1 = point_from, point2 = point_to))
         return edges
+
+    @staticmethod
+    def calculate_solution_distance(points: List[Point]) -> float:
+        """ calculates the total distance of the path """
+        path = SolutionHandler.point_path_to_edges(points)
+        distance = 0.0
+        for edge in path:
+            distance += edge.length()
+        return distance
+

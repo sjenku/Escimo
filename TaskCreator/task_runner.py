@@ -27,6 +27,7 @@ class TaskRunner:
         statistics.number_of_polygons = engine.get_number_of_polygons()
         statistics.polygons_radius_from = config.polygon_radius_range.from_
         statistics.polygons_radius_to = config.polygon_radius_range.to
+        statistics.distance_start_to_end_point = config.start_position.point().distance(config.end_position.point())
 
         # create polygons
         cunvex_hulls = []
