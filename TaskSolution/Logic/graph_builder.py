@@ -82,7 +82,9 @@ class GraphBuilder(BaseModel):
 
         for point in points:
             for another_point in points:
-                if point == another_point:
+                if (point == another_point or
+                        point == self.start_point and another_point == self.end_point or
+                        point == self.end_point and another_point == self.start_point):
                     continue
 
                 new_edge = UndirectedEdge(point1 = point, point2 = another_point)

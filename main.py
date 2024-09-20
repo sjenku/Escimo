@@ -22,7 +22,7 @@ taskRunner.run(draw_tool= draw_tool,config= config)
 solutionRunner = SolutionRunner()
 solutionRunner.run(draw_tool= draw_tool,config= config)
 
-#draw_tool.show()
+draw_tool.show()
 
 statistics = StatisticsSingleton()
 statistics.write()

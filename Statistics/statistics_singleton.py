@@ -38,7 +38,7 @@ class StatisticsSingleton:
 
     def write(self):
 
-        filename = 'statistics_with_distance.csv'
+        filename = 'statistics.csv'
 
         # Check if the file exists
         file_exists = os.path.isfile(filename)
