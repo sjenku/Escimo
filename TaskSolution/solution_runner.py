@@ -71,6 +71,7 @@ class SolutionRunner:
         if solution is not None:
             statistic.found_path = True # update the statistics
             statistic.result_path_distance = solution_handler.calculate_solution_distance(solution)
+            statistic.distance_diff = abs(statistic.distance_start_to_end_point - statistic.result_path_distance)
             solution_edges = solution_handler.point_path_to_edges(solution) # convert this list of points to edges
             for i,edge in enumerate(solution_edges):
                 draw_tool.draw_line_between_points(edge.point1, edge.point2,"green",f"Edge{i+1}",True)

@@ -23,6 +23,7 @@ class StatisticsSingleton:
     found_path:bool = False
     distance_start_to_end_point:float = 0.0
     result_path_distance:float = 0.0
+    distance_diff:float = 0.0
 
 
     def __new__(cls, *args, **kwargs):
@@ -60,7 +61,8 @@ class StatisticsSingleton:
                                  'polygons radius to',
                                  'found path',
                                  'distance start to end',
-                                 'result path distance'])
+                                 'result path distance',
+                                 'distance diff'])
 
             # Define the new data to be added
             new_data = [self.build_graph_algo,
@@ -75,7 +77,8 @@ class StatisticsSingleton:
                         self.polygons_radius_to,
                         self.found_path,
                         self.distance_start_to_end_point,
-                        self.result_path_distance]
+                        self.result_path_distance,
+                        self.distance_diff]
 
             # Write the new data row
             writer.writerow(new_data)
