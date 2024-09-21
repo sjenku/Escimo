@@ -8,7 +8,6 @@ from Module.engine_data import EngineData
 from Statistics.statistics_singleton import StatisticsSingleton
 from TaskSolution.Logic.graph_builder import GraphBuilder
 from TaskSolution.Logic.solution_handler import SolutionHandler
-from Utils.converter import Converter
 from Utils.draw import DrawTool
 
 
@@ -31,7 +30,7 @@ class SolutionRunner:
         # create a list of polygons from the data
         polygons_list = []
         for iceberg in engine_data.icebergs:
-            polygon = Converter.to_polygon(iceberg)
+            polygon = iceberg.to_polygon()
             polygons_list.append(polygon)
 
         # get the start and end points
