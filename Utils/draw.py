@@ -1,7 +1,6 @@
 import plotly.graph_objects as go
 from numpy import random
 
-from TaskSolution.Model.graph import Graph
 
 """ DrawTool is a Singleton"""
 class DrawTool:
@@ -100,11 +99,5 @@ class DrawTool:
             showlegend= False if name is None else True,
         ))
 
-    #TODO: continue
-    def draw_graph(self,graph:Graph) -> None:
-        for point in graph.points:
-            self.draw_point(point)
-        for edge in graph.edges:
-            self.draw_line_between_points(edge.point1,edge.point2)
 
 
