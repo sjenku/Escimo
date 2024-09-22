@@ -8,7 +8,7 @@ from Module.engine_data import EngineData
 from Statistics.statistics_singleton import StatisticsSingleton
 from TaskSolution.Logic.graph_builder import GraphBuilder
 from TaskSolution.Logic.solution_handler import SolutionHandler
-from Utils.draw import DrawTool
+from Utils.draw_tool import DrawTool
 
 
 class SolutionRunner:

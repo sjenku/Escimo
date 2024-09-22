@@ -4,7 +4,7 @@ from Configuration.configuration import Configurations
 from Statistics.statistics_singleton import StatisticsSingleton
 from TaskCreator.task_runner import TaskRunner
 from TaskSolution.solution_runner import SolutionRunner
-from Utils.draw import DrawTool
+from Utils.draw_tool import DrawTool
 
 file_path = r"Configuration/configuration.json"
 

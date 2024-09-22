@@ -3,7 +3,7 @@ from datetime import datetime
 
 from Statistics.statistics_singleton import StatisticsSingleton
 from TaskCreator.Logic.engine_eskimo import EngineEskimo
-from Utils.draw import DrawTool
+from Utils.draw_tool import DrawTool
 from Configuration.configuration import Configurations
 
 
