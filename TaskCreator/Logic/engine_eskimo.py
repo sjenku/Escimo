@@ -3,13 +3,12 @@ import numpy as np
 from shapely import MultiPoint, Point, Polygon
 from pydantic import BaseModel, conint, model_validator
 
-from Module.coords import Coords
 from Module.engine_data import EngineData
 from Module.iceberg import Iceberg
 from Module.iceberg_points import IcebergPoints
 from Module.point_wrapper import PointWrapper
 from Module.polygon_wrapper import PolygonWrapper
-from TaskCreator.Model.range import Range
+from Module.range import Range
 
 # helper function that creates a point around a center_point no further than the max_radius
 def create_point_around_center(center_point, max_radius) -> Point:

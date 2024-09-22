@@ -1,6 +1,6 @@
 from pydantic import conint, BaseModel
 from Module.point_wrapper import PointWrapper
-from TaskCreator.Model.range import Range
+from Module.range import Range
 
 
 class Configurations(BaseModel):
