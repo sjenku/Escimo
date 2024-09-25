@@ -92,10 +92,10 @@ class GraphBuilder(BaseModel):
         return Point(x, y)
 
     def _randomly_sample_valid_point_in_radius(self,center:Point, radius:float,surface_size) -> Point:
-        is_point_in_polygon = True
+        is_valid_point = False
         x = 0
         y = 0
-        while is_point_in_polygon or not(0 <= x <= surface_size and 0 <= y <= surface_size):
+        while not is_valid_point or not(0 <= x <= surface_size and 0 <= y <= surface_size):
             # generate a random angle between 0 and 2*pi
             angle = np.random.uniform(0, 2 * np.pi)
 
@@ -106,10 +106,20 @@ class GraphBuilder(BaseModel):
             x = center.x + random_radius * np.cos(angle)
             y = center.y + random_radius * np.sin(angle)
 
-            is_point_in_polygon = False
+            is_valid_point = True # first assume the point is ok
+            if x < 0 or y < 0 or x >= surface_size or y >= surface_size:
+                is_valid_point = False
+                continue
+
+            edge = UndirectedEdge(point1=Point(x,y), point2=center)
+            if edge.is_in_polygons(self.polygons):
+                is_valid_point = False
+                continue
+
             for polygon in self.polygons:
                 if polygon.contains(Point(x, y)):
-                    is_point_in_polygon = True
+                    is_valid_point = False
+
 
         return Point(x, y)
 
@@ -130,10 +140,12 @@ class GraphBuilder(BaseModel):
         for neighbor in neighboors:
             potential_cost = (new_node.cost + distance(new_node.point, neighbor.point))
             if potential_cost < neighbor.cost:
-                # rewire
-                neighbor.parent = new_node
-                neighbor.cost = potential_cost
-
+                # check if we will rewire, if edge will not cross polygon
+                edge = UndirectedEdge(point1=neighbor.point, point2=new_node.point)
+                if not edge.is_in_polygons(self.polygons):
+                    # rewire
+                    neighbor.parent = new_node
+                    neighbor.cost = potential_cost
 
     @staticmethod
     def _build_graph_from_tree(tree) -> Graph:
@@ -154,7 +166,7 @@ class GraphBuilder(BaseModel):
         tree = [start_node]
         step_size = 20
         neighborhood_radius = 50
-        max_iterations = 1500
+        max_iterations = 2000
         for _ in range(max_iterations):
             # generate random sample
             random_point = self._randomly_sample_valid_point(surface_size)
