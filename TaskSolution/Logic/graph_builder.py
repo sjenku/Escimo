@@ -12,12 +12,11 @@ from TaskSolution.Model.graph import Graph
 from TaskSolution.Model.undirected_edge import UndirectedEdge
 
 
-# class RrtNode:
-#     point: Point
-#     cost: float
-#     def __init__(self, point: Point, cost: float):
-#         self.point = point
-#         self.cost = cost
+class RrtNode:
+    def __init__(self, point: Point,parent = None ):
+        self.point = point
+        self.parent = parent
+        self.cost = float('inf')  # Cost from start to this node
 
 class GraphBuilder(BaseModel):
     """
@@ -122,59 +121,62 @@ class GraphBuilder(BaseModel):
     #     else:
     #         direction = direction / distance_to_target # normalize
 
-    def rewire(self,edges,points,new_point,radius,costs,costs_neighboor_edge):
+    def rewire(self,tree,new_node,radius):
         neighboors = []
-        for p in points:
-            if distance(new_point, p) < radius:
-                neighboors.append(p)
+        for node in tree:
+            if distance(new_node.point, node.point) < radius:
+                neighboors.append(node)
 
         for neighbor in neighboors:
-            potential_cost = costs[new_point] + distance(new_point, neighbor)
-            if potential_cost < costs[neighbor]:
+            potential_cost = (new_node.cost + distance(new_node.point, neighbor.point))
+            if potential_cost < neighbor.cost:
                 # rewire
-                edges.append(UndirectedEdge(point1 = new_point, point2 = neighbor))
-                costs[neighbor] = potential_cost
-                # TODO: delete previous edge
-                # edges.remove(UndirectedEdge(point1 = neighbor, point2 = ))
-                edge_to_remove = costs_neighboor_edge[new_point]
-                if edge_to_remove in edges:
-                    edges.remove(costs_neighboor_edge[new_point])
+                neighbor.parent = new_node
+                neighbor.cost = potential_cost
 
 
+    @staticmethod
+    def _build_graph_from_tree(tree) -> Graph:
+        points = []
+        edges = []
+
+        for node in tree:
+            points.append(node.point)
+            if node.parent is not None:
+                new_edge = UndirectedEdge(point1 = node.point, point2 = node.parent.point)
+                edges.append(new_edge)
+        return Graph(points = points,edges = edges)
 
     def rrt_star(self,surface_size) -> Graph:
-        # 1) Initialization
-        points = [self.start_point]
-        costs = {self.start_point: 0}
-        costs_neighboor_edge = {self.start_point: UndirectedEdge(point1 = self.start_point,point2 = self.start_point)} # need when we rewire, know what edge to change
-        edges = []
-        step_size = 30
-        neighborhood_radius = 30
-        max_iterations = 1000
+        # initialization
+        start_node = RrtNode(self.start_point)
+        start_node.cost = 0
+        tree = [start_node]
+        step_size = 20
+        neighborhood_radius = 50
+        max_iterations = 1500
         for _ in range(max_iterations):
-            # 2) Generate Random Sample
+            # generate random sample
             random_point = self._randomly_sample_valid_point(surface_size)
-            # 3) Find Nearest Point
-            nearset_point = min(points, key=lambda point: distance(point, random_point))
-            # 4) Generate a point that close to the nearset point
-            new_point = self._randomly_sample_valid_point_in_radius(nearset_point, step_size,surface_size)
-            # 6) Add Point to Graph and Edge to the nearest point
-            costs[new_point] = costs.get(nearset_point,0) + distance(nearset_point,new_point)
-            points.append(new_point)
-            new_edge = UndirectedEdge(point1=nearset_point, point2=new_point)
-            edges.append(new_edge)
-            costs_neighboor_edge[new_point] = new_edge
-            # 8) Check goal condition
+            # find nearest node
+            nearst_node = min(tree, key=lambda node: distance(node.point, random_point))
+            # generate a point that close to the nearset point
+            new_point = self._randomly_sample_valid_point_in_radius(nearst_node.point, step_size,surface_size)
+            new_node = RrtNode(new_point,nearst_node)
+            # add node to the tree
+            new_node.cost = nearst_node.cost + distance(nearst_node.point, new_point)
+            tree.append(new_node)
+            # check goal condition
             edge = UndirectedEdge(point1=new_point, point2=self.end_point)
             if distance(new_point,self.end_point) < step_size and not edge.is_in_polygons(self.polygons):
-                # 6) Add Edge to the target point and the target point
-                points.append(self.end_point)
-                edges.append(edge)
-                return Graph(points = points, edges = edges)
-            # 7) Rewire Tree
-            self.rewire(edges,points,new_point,neighborhood_radius,costs,costs_neighboor_edge)
-            # TODO:
-        return Graph(points = points, edges = edges)
+                # add the end node, and return the graph
+                end_node = RrtNode(self.end_point,new_node)
+                tree.append(end_node)
+                graph = self._build_graph_from_tree(tree)
+                return graph
+            # rewire the tree
+            self.rewire(tree,new_node,neighborhood_radius)
+        return self._build_graph_from_tree(tree)
 
 
     def build(self,surface_size,build_with_prm = False) -> Graph:

@@ -2,7 +2,7 @@ import math
 import random
 
 import numpy as np
-from shapely import  Point, Polygon
+from shapely import Point, Polygon, MultiPoint
 from pydantic import BaseModel, conint, model_validator
 from shapely.lib import distance
 
@@ -111,9 +111,9 @@ class EngineEskimo(BaseModel):
             points.append(point)
 
         # use convex_hull to wrap this points into a polygon
-        # multipoint = MultiPoint(points)
-        # convex_hull = multipoint.convex_hull
-        convex_hull = self._graham_scan(points)
+        multipoint = MultiPoint(points)
+        convex_hull = multipoint.convex_hull
+        # convex_hull = self._graham_scan(points)
 
         return points,convex_hull
 
