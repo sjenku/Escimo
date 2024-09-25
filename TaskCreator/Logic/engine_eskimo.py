@@ -1,11 +1,8 @@
 import math
 import random
-from math import dist
-from turtle import Vec2D
 
 import numpy as np
-from scipy.constants import point
-from shapely import MultiPoint, Point, Polygon
+from shapely import  Point, Polygon
 from pydantic import BaseModel, conint, model_validator
 from shapely.lib import distance
 
@@ -13,7 +10,6 @@ from Module.engine_data import EngineData
 from Module.iceberg import Iceberg
 from Module.iceberg_points import IcebergPoints
 from Module.point_wrapper import PointWrapper
-from Module.polygon_wrapper import PolygonWrapper
 from Module.range import Range
 
 # helper function that creates a point around a center_point no further than the max_radius
@@ -96,7 +92,7 @@ class EngineEskimo(BaseModel):
             self.polygon_radius_range.to)
 
         # random center point
-        padding = int(self.surface_size/10) # insure that the center point not too close to surface borders
+        padding = int(self.surface_size/10) # ensure that the center point not too close to surface borders
         center_point_x = random.randint(padding,self.surface_size - padding)
         center_point_y = random.randint(padding, self.surface_size - padding)
         center_point = Point(center_point_x, center_point_y)
@@ -118,7 +114,6 @@ class EngineEskimo(BaseModel):
         # multipoint = MultiPoint(points)
         # convex_hull = multipoint.convex_hull
         convex_hull = self._graham_scan(points)
-        wrapper = PolygonWrapper.from_polygon(convex_hull)
 
         return points,convex_hull
 
@@ -129,7 +124,7 @@ class EngineEskimo(BaseModel):
 
         # check if overlapping
         if len(self.polygons) != 0:
-            # for every polygon that exist, check if not overlapping, if does, create a new one and check again
+            # for every polygon that exist, check if not overlapping, if it does, create a new one and check again
             while not valid:
                 valid = True  # assume it's valid unless proven otherwise
                 for another_polygon in self.polygons:
@@ -137,7 +132,7 @@ class EngineEskimo(BaseModel):
                             new_polygon.contains(self.start_pos) or
                             new_polygon.contains(self.end_pos)):
                         points , new_polygon = self.create_polygon()
-                        valid = False # set to False to retry with a new polygon
+                        valid = False # set False to retry with a new polygon
                         break
 
         self.polygons.append(new_polygon)
