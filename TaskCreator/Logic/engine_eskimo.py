@@ -1,7 +1,13 @@
+import math
 import random
+from math import dist
+from turtle import Vec2D
+
 import numpy as np
+from scipy.constants import point
 from shapely import MultiPoint, Point, Polygon
 from pydantic import BaseModel, conint, model_validator
+from shapely.lib import distance
 
 from Module.engine_data import EngineData
 from Module.iceberg import Iceberg
@@ -109,8 +115,9 @@ class EngineEskimo(BaseModel):
             points.append(point)
 
         # use convex_hull to wrap this points into a polygon
-        multipoint = MultiPoint(points)
-        convex_hull = multipoint.convex_hull
+        # multipoint = MultiPoint(points)
+        # convex_hull = multipoint.convex_hull
+        convex_hull = self._graham_scan(points)
         wrapper = PolygonWrapper.from_polygon(convex_hull)
 
         return points,convex_hull
@@ -201,3 +208,33 @@ class EngineEskimo(BaseModel):
 
         return data
 
+    def _graham_scan(self,points) -> Polygon:
+        p0 = min(points,key=lambda p:(p.y,p.x)) # get the point that have the lowest y value
+        sorted_points = sorted(points,key=lambda p:(self._polar_angle(p0,p),distance(p0,p)))
+        hull_points = []
+
+        for i in range(len(sorted_points)):
+            while len(hull_points) > 2 and not self._is_counter_clock_wise(hull_points[-2],hull_points[-1],sorted_points[i]):
+                hull_points.pop()
+            hull_points.append(sorted_points[i])
+
+        polygon = Polygon(hull_points)
+        return polygon
+
+
+
+    @staticmethod
+    def _polar_angle(point_a,point_b) -> float:
+        angle_radians = math.atan2(point_b.y - point_a.y,point_b.x - point_a.x)
+        return math.degrees(angle_radians)
+
+    @staticmethod
+    def _is_counter_clock_wise(a,b,c) -> bool:
+        vector_v = b.x-a.x,b.y-a.y
+        vector_w = c.x-a.x,c.y-a.y
+        area = vector_v[0] * vector_w[1] - vector_v[1] * vector_w[0]
+
+        if area >= 0:
+            return True
+        else:
+            return False

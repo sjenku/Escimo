@@ -8,8 +8,8 @@
     "y": 480.0
   },
   "number_of_polygons_range" : {
-    "from":1,
-    "to": 1
+    "from":5,
+    "to": 10
   },
   "number_of_points_in_polygon_range" :{
     "from": 10,
